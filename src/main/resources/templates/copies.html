@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Свободные экземпляры')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <section class="toolbar">
+        <div class="pill"><h1 class="display">Свободные экземпляры</h1></div>
+        <form class="inline-form" th:action="@{/copies}" method="get">
+            <select id="title" name="title" aria-label="Книга" required>
+                <option value="">Выберите книгу</option>
+                <option th:each="b : ${books}" th:value="${b.title}" th:text="${b.title}"
+                        th:selected="${b.title == selectedTitle}">Книга</option>
+            </select>
+            <button class="btn" type="submit">Найти</button>
+        </form>
+    </section>
+
+    <div th:if="${searched}">
+        <div class="block empty" th:if="${#lists.isEmpty(copies)}">
+            Свободных экземпляров книги «<span th:text="${selectedTitle}"></span>» нет.
+        </div>
+        <section class="cards" th:unless="${#lists.isEmpty(copies)}">
+            <article class="card" th:each="c : ${copies}">
+                <span class="tag" th:text="'ID ' + ${c.id}">ID 1</span>
+                <h3 th:text="${c.inventoryNumber}">INV-0001</h3>
+                <span class="meta">Инвентарный номер экземпляра</span>
+            </article>
+        </section>
+    </div>
+    <div class="block empty" th:unless="${searched}">Выберите книгу и нажмите «Найти».</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

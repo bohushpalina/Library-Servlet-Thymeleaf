@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Книги автора')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <section class="toolbar">
+        <div class="pill"><h1 class="display">Книги автора</h1></div>
+        <form class="inline-form" th:action="@{/books}" method="get">
+            <select id="author" name="author" aria-label="Автор">
+                <option value="">Все авторы</option>
+                <option th:each="a : ${authors}" th:value="${a.fullName}" th:text="${a.fullName}"
+                        th:selected="${a.fullName == selectedAuthor}">Автор</option>
+            </select>
+            <button class="btn" type="submit">Найти</button>
+        </form>
+    </section>
+
+    <div th:if="${searched}">
+        <div class="block empty" th:if="${#lists.isEmpty(books)}">Книги не найдены.</div>
+        <section class="cards" th:unless="${#lists.isEmpty(books)}">
+            <article class="card" th:each="b : ${books}">
+                <span class="tag" th:text="'ID ' + ${b.id}">ID 1</span>
+                <h3 th:text="${b.title}">Название</h3>
+                <span class="meta" th:text="${b.publisher} + ', ' + ${b.publishYear}">Издательство, год</span>
+            </article>
+        </section>
+    </div>
+    <div class="block empty" th:unless="${searched}">Выберите автора и нажмите «Найти».</div>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

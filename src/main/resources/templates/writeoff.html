@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Списание экземпляра')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <h1 class="section-title">Списание экземпляра</h1>
+
+    <div class="block empty" th:if="${#lists.isEmpty(copies)}">Нет экземпляров для списания.</div>
+
+    <form class="block" th:unless="${#lists.isEmpty(copies)}" th:action="@{/writeoff}" method="post">
+        <p class="label">Списанный экземпляр остаётся в базе, чтобы сохранилась история выдач.</p>
+        <div class="field">
+            <label class="label" for="copyId">Экземпляр</label>
+            <select id="copyId" name="copyId" required>
+                <option value="">Выберите экземпляр</option>
+                <option th:each="c : ${copies}" th:value="${c.id}"
+                        th:text="'[' + ${c.id} + '] ' + ${c.book.title} + ' (инв. ' + ${c.inventoryNumber} + ')'">Экземпляр</option>
+            </select>
+        </div>
+        <div class="strip" style="margin-top:18px">
+            <button class="btn" type="submit">Списать</button>
+        </div>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

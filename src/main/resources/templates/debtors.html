@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Должники')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <section class="toolbar">
+        <div class="pill"><h1 class="display">Должники</h1></div>
+        <span class="label" th:unless="${#lists.isEmpty(debtors)}">
+            Найдено читателей: <b th:text="${#lists.size(debtors)}">0</b>
+        </span>
+    </section>
+
+    <div class="block empty" th:if="${#lists.isEmpty(debtors)}">Должников нет.</div>
+
+    <section class="cards" th:unless="${#lists.isEmpty(debtors)}">
+        <article class="card" th:each="r : ${debtors}">
+            <span class="tag" th:text="'ID ' + ${r.id}">ID 1</span>
+            <h3 th:text="${r.fullName}">ФИО</h3>
+            <span class="meta" th:text="${r.phone}">+375...</span>
+            <span class="meta spacer" th:text="${r.address}">Адрес</span>
+        </article>
+    </section>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

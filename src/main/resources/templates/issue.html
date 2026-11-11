@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Выдача книги')}"></head>
+<body>
+<header th:replace="~{fragments :: nav}"></header>
+<main class="page">
+    <div th:replace="~{fragments :: flash}"></div>
+
+    <div class="block empty" th:if="${#lists.isEmpty(copies)}">Свободных экземпляров нет.</div>
+
+    <form class="bento" th:unless="${#lists.isEmpty(copies)}" th:action="@{/issue}" method="post">
+        <section class="block hero b-top">
+            <h1 class="display">Выдача книги</h1>
+            <p>Выберите свободный экземпляр, читателя и библиотекаря, затем подтвердите выдачу.</p>
+        </section>
+
+        <section class="block b-left">
+            <span class="step">01</span>
+            <div class="field">
+                <label class="label" for="copyId">Свободный экземпляр</label>
+                <select id="copyId" name="copyId" required>
+                    <option value="">Выберите экземпляр</option>
+                    <option th:each="c : ${copies}" th:value="${c.id}"
+                            th:text="'[' + ${c.id} + '] ' + ${c.book.title} + ' (инв. ' + ${c.inventoryNumber} + ')'">Экземпляр</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="block b-r1">
+            <span class="step">02</span>
+            <div class="field">
+                <label class="label" for="readerId">Читатель</label>
+                <select id="readerId" name="readerId" required>
+                    <option value="">Выберите читателя</option>
+                    <option th:each="r : ${readers}" th:value="${r.id}"
+                            th:text="'[' + ${r.id} + '] ' + ${r.fullName} + ', ' + ${r.phone}">Читатель</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="block b-r2">
+            <span class="step">03</span>
+            <div class="field">
+                <label class="label" for="librarianId">Библиотекарь</label>
+                <select id="librarianId" name="librarianId" required>
+                    <option value="">Выберите библиотекаря</option>
+                    <option th:each="l : ${librarians}" th:value="${l.id}"
+                            th:text="'[' + ${l.id} + '] ' + ${l.fullName}">Библиотекарь</option>
+                </select>
+            </div>
+        </section>
+
+        <section class="strip b-send">
+            <button class="btn" type="submit">Выдать книгу</button>
+        </section>
+    </form>
+</main>
+<footer th:replace="~{fragments :: footer}"></footer>
+</body>
+</html>

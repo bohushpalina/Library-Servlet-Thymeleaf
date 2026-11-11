@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title}">Библиотека</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@700;900&amp;display=swap" rel="stylesheet">
+    <th:block th:replace="~{styles :: css}"></th:block>
+</head>
+<body>
+
+<header class="topbar" th:fragment="nav">
+    <div class="topbar-inner">
+        <a class="brand" th:href="@{/}">Библиотека</a>
+        <a class="link" th:href="@{/books}">Книги автора</a>
+        <a class="link" th:href="@{/copies}">Свободные экземпляры</a>
+        <a class="link" th:href="@{/issue}">Выдать книгу</a>
+        <a class="link" th:href="@{/writeoff}">Списать</a>
+        <a class="link" th:href="@{/debtors}">Должники</a>
+    </div>
+</header>
+
+<div th:fragment="flash">
+    <div th:if="${flash != null}" th:class="'flash ' + ${flashType}" th:text="${flash}">Сообщение</div>
+</div>
+
+<footer class="site-footer" th:fragment="footer">
+    <span>Посещений: <b th:text="${visitCount}">1</b></span>
+    <span th:if="${previousVisit != null}">Предыдущий визит: <b th:text="${previousVisit}">-</b></span>
+    <span th:if="${previousVisit == null}">Это ваш первый визит</span>
+    <span>Сеанс начат: <b th:text="${sessionStart}">-</b></span>
+    <span>Запросов в сеансе: <b th:text="${requests}">1</b></span>
+</footer>
+
+</body>
+</html>
