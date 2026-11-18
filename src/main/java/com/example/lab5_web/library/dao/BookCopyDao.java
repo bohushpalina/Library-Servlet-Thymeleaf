@@ -1,11 +1,11 @@
 package com.example.lab5_web.library.dao;
 
+import com.example.lab5_web.library.JpaUtil;
 import com.example.lab5_web.library.entity.BookCopy;
 import com.example.lab5_web.library.entity.BookCopy_;
 import com.example.lab5_web.library.exception.LibraryException;
 import com.example.lab5_web.library.exception.LibraryException.ErrorCode;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -17,17 +17,14 @@ import org.slf4j.LoggerFactory;
 public class BookCopyDao {
   private static final Logger log = LoggerFactory.getLogger(BookCopyDao.class);
 
-  private final EntityManagerFactory emf;
-
-  public BookCopyDao(EntityManagerFactory emf) {
-    this.emf = emf;
-  }
-
   // Списывает экземпляр по id; если его нет, выбрасывает COPY_NOT_FOUND
   public void writeOff(int copyId) throws LibraryException {
-    EntityManager em = emf.createEntityManager();
-    EntityTransaction tx = em.getTransaction();
+    log.info("БД: списание экземпляра {}", copyId);
+    EntityManager em = null;
+    EntityTransaction tx = null;
     try {
+      em = JpaUtil.createEntityManager();
+      tx = em.getTransaction();
       tx.begin();
 
       CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -39,21 +36,24 @@ public class BookCopyDao {
       int updated = em.createQuery(update).executeUpdate();
 
       if (updated == 0) {
-        log.warn("Экземпляр книги с ID {} не найден для списания", copyId);
+        log.warn("БД: экземпляр книги с ID {} не найден для списания", copyId);
         throw new LibraryException(ErrorCode.COPY_NOT_FOUND,
             "Экземпляр книги с ID " + copyId + " не найден");
       }
       tx.commit();
-      log.info("Экземпляр книги с ID {} успешно списан", copyId);
+      log.info("БД: экземпляр книги с ID {} успешно списан", copyId);
     } catch (PersistenceException e) {
-      log.error("Ошибка при списании экземпляра книги {}", copyId, e);
+      log.error("БД: ошибка при списании экземпляра книги {}", copyId, e);
       throw new LibraryException(ErrorCode.QUERY_ERROR,
           "Не удалось списать экземпляр книги " + copyId, e);
     } finally {
-      if (tx.isActive()) {
+      if (tx != null && tx.isActive()) {
         tx.rollback();
+        log.warn("БД: транзакция списания экземпляра {} откатана", copyId);
       }
-      em.close();
+      if (em != null) {
+        em.close();
+      }
     }
   }
 }

@@ -32,12 +32,12 @@ public final class VisitTracker {
       session.setAttribute("previousVisit", previousVisit > 0 ? format(previousVisit) : null);
       session.setAttribute("sessionStart", format(now));
       session.setAttribute("requests", 0);
-      addCookie(response, COOKIE_COUNT, String.valueOf(count));
+      addCookie(request, response, COOKIE_COUNT, String.valueOf(count));
     }
 
     session.setAttribute("requests", (Integer) session.getAttribute("requests") + 1);
     // время последнего обращения обновляется при каждом запросе
-    addCookie(response, COOKIE_LAST, String.valueOf(now));
+    addCookie(request, response, COOKIE_LAST, String.valueOf(now));
   }
 
   /** Данные сессии для отображения на каждой странице. */
@@ -72,9 +72,10 @@ public final class VisitTracker {
     }
   }
 
-  private static void addCookie(HttpServletResponse response, String name, String value) {
+  private static void addCookie(HttpServletRequest request, HttpServletResponse response, String name, String value) {
     Cookie cookie = new Cookie(name, value);
-    cookie.setPath("/");
+    String contextPath = request.getContextPath();
+    cookie.setPath(contextPath.isEmpty() ? "/" : contextPath);
     cookie.setMaxAge(ONE_YEAR);
     cookie.setHttpOnly(true);
     response.addCookie(cookie);

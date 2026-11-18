@@ -1,12 +1,12 @@
 package com.example.lab5_web.library.dao;
 
+import com.example.lab5_web.library.JpaUtil;
 import com.example.lab5_web.library.entity.Loan;
 import com.example.lab5_web.library.entity.Loan_;
 import com.example.lab5_web.library.entity.Reader;
 import com.example.lab5_web.library.exception.LibraryException;
 import com.example.lab5_web.library.exception.LibraryException.ErrorCode;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -21,16 +21,12 @@ import java.util.List;
 public class ReaderDao {
   private static final Logger log = LoggerFactory.getLogger(ReaderDao.class);
 
-  private final EntityManagerFactory emf;
-
-  public ReaderDao(EntityManagerFactory emf) {
-    this.emf = emf;
-  }
-
   // Читатели-должники: есть невозвращённая книга, выданная больше месяца назад
   public List<Reader> findDebtors() throws LibraryException {
-    EntityManager em = emf.createEntityManager();
+    log.info("БД: поиск должников");
+    EntityManager em = null;
     try {
+      em = JpaUtil.createEntityManager();
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Reader> cq = cb.createQuery(Reader.class);
       Root<Reader> reader = cq.from(Reader.class);
@@ -48,13 +44,15 @@ public class ReaderDao {
       cq.select(reader).where(cb.exists(overdue));
 
       List<Reader> debtors = em.createQuery(cq).getResultList();
-      log.info("Найдено должников: {}", debtors.size());
+      log.info("БД: найдено должников: {}", debtors.size());
       return debtors;
     } catch (PersistenceException e) {
-      log.error("Ошибка при поиске должников", e);
+      log.error("БД: ошибка при поиске должников", e);
       throw new LibraryException(ErrorCode.QUERY_ERROR, "Не удалось получить список должников", e);
     } finally {
-      em.close();
+      if (em != null) {
+        em.close();
+      }
     }
   }
 }

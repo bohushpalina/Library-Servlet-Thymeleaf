@@ -18,7 +18,7 @@ public class WriteOffCommand implements Command {
   }
 
   @Override
-  public ViewResult execute(HttpServletRequest request) {
+  public ViewResult execute(HttpServletRequest request) throws LibraryException {
     try {
       int copyId = Params.intParam(request, "copyId");
       BookCopy copy = lookupDao.find(BookCopy.class, copyId);
@@ -32,7 +32,10 @@ public class WriteOffCommand implements Command {
     } catch (NumberFormatException e) {
       Flash.error(request.getSession(), "Выберите экземпляр из списка.");
     } catch (LibraryException e) {
-      Flash.error(request.getSession(), e.getMessage());
+      if (e.getErrorCode() == LibraryException.ErrorCode.DB_UNAVAILABLE) {
+        throw e;                                   // критическая ошибка: страница error.html
+      }
+      Flash.error(request.getSession(), e.getUserMessage());
     }
     return ViewResult.redirect("/writeoff");       // Post/Redirect/Get
   }

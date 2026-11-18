@@ -1,10 +1,10 @@
 package com.example.lab5_web.library.dao;
 
+import com.example.lab5_web.library.JpaUtil;
 import com.example.lab5_web.library.entity.*;
 import com.example.lab5_web.library.exception.LibraryException;
 import com.example.lab5_web.library.exception.LibraryException.ErrorCode;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.PersistenceException;
 import jakarta.persistence.criteria.*;
 import org.slf4j.Logger;
@@ -16,16 +16,12 @@ import java.util.List;
 public class BookDao {
   private static final Logger log = LoggerFactory.getLogger(BookDao.class);
 
-  private final EntityManagerFactory emf;
-
-  public BookDao(EntityManagerFactory emf) {
-    this.emf = emf;
-  }
-
   // Свободные экземпляры книги по названию: не списанные и не выданные на руки
   public List<BookCopy> findFreeCopies(String title) throws LibraryException {
-    EntityManager em = emf.createEntityManager();
+    log.info("БД: поиск свободных экземпляров книги '{}'", title);
+    EntityManager em = null;
     try {
+      em = JpaUtil.createEntityManager();
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<BookCopy> cq = cb.createQuery(BookCopy.class);
       Root<BookCopy> copy = cq.from(BookCopy.class);
@@ -45,22 +41,26 @@ public class BookDao {
           cb.not(cb.exists(openLoan)));
 
       List<BookCopy> copies = em.createQuery(cq).getResultList();
-      log.info("Найдено {} свободных экземпляров для книги '{}'", copies.size(), title);
+      log.info("БД: найдено {} свободных экземпляров для книги '{}'", copies.size(), title);
       return copies;
     } catch (PersistenceException e) {
-      log.error("Ошибка при поиске свободных экземпляров книги '{}'", title, e);
+      log.error("БД: ошибка при поиске свободных экземпляров книги '{}'", title, e);
       throw new LibraryException(ErrorCode.QUERY_ERROR,
           "Не удалось найти свободные экземпляры книги '" + title + "'", e);
     } finally {
-      em.close();
+      if (em != null) {
+        em.close();
+      }
     }
   }
 
   // Книги автора с указанным ФИО. Условие добавляется динамически:
   // если ФИО пустое, возвращаются все книги
   public List<Book> findByAuthor(String authorName) throws LibraryException {
-    EntityManager em = emf.createEntityManager();
+    log.info("БД: поиск книг автора '{}'", authorName);
+    EntityManager em = null;
     try {
+      em = JpaUtil.createEntityManager();
       CriteriaBuilder cb = em.getCriteriaBuilder();
       CriteriaQuery<Book> cq = cb.createQuery(Book.class);
       Root<Book> book = cq.from(Book.class);
@@ -76,14 +76,16 @@ public class BookDao {
           .orderBy(cb.asc(book.get(Book_.title)));
 
       List<Book> books = em.createQuery(cq).getResultList();
-      log.info("Найдено {} книг для автора '{}'", books.size(), authorName);
+      log.info("БД: найдено {} книг для автора '{}'", books.size(), authorName);
       return books;
     } catch (PersistenceException e) {
-      log.error("Ошибка при поиске книг автора '{}'", authorName, e);
+      log.error("БД: ошибка при поиске книг автора '{}'", authorName, e);
       throw new LibraryException(ErrorCode.QUERY_ERROR,
           "Не удалось найти книги автора '" + authorName + "'", e);
     } finally {
-      em.close();
+      if (em != null) {
+        em.close();
+      }
     }
   }
 }

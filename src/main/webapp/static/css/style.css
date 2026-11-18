@@ -1,22 +1,17 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head>
-<!-- Единый файл оформления. Подключается в <head> через fragments.html -->
-<style th:fragment="css">
-                        :root {
-                            --ink: #140401;
-                            --brew: #270902;        /* Root Brew */
-                            --choc: #4A0D02;        /* Lonely Chocolate */
-                            --copper: #7E1902;      /* New Kenyan Copper */
-                            --crimson: #B52D02;     /* Crimson Velvet Sunset */
-                            --orange: #D65505;      /* Exuberance */
-                            --chat: #F79E3A;        /* Chat Orange */
-                            --yellow: #FDDF84;      /* Swedish Yellow */
-                            --text: #F5E6C8;
-                            --muted: rgba(253, 223, 132, .62);
-                            --line: rgba(247, 158, 58, .22);
-                            --radius: 18px;
-                        }
+:root {
+    --ink: #140401;
+    --brew: #270902;        /* Root Brew */
+    --choc: #4A0D02;        /* Lonely Chocolate */
+    --copper: #7E1902;      /* New Kenyan Copper */
+    --crimson: #B52D02;     /* Crimson Velvet Sunset */
+    --orange: #D65505;      /* Exuberance */
+    --chat: #F79E3A;        /* Chat Orange */
+    --yellow: #FDDF84;      /* Swedish Yellow */
+    --text: #F5E6C8;
+    --muted: rgba(253, 223, 132, .62);
+    --line: rgba(247, 158, 58, .22);
+    --radius: 18px;
+}
 * { box-sizing: border-box; }
 body {
     margin: 0; min-height: 100vh;
@@ -26,7 +21,7 @@ body {
             radial-gradient(1100px 560px at 88% -8%, rgba(214, 85, 5, .30), transparent 60%),
             radial-gradient(900px 520px at -8% 108%, rgba(181, 45, 2, .24), transparent 55%),
             linear-gradient(rgba(20, 4, 1, .70), rgba(20, 4, 1, .86)),
-            url('../static/library.jpg') no-repeat center center / cover,
+            url('../library.jpg') no-repeat center center / cover,
             var(--ink);
     background-attachment: fixed;
 }
@@ -36,7 +31,7 @@ a { color: var(--chat); }
     font-weight: 900; text-transform: uppercase; letter-spacing: .02em; line-height: 1.05;
 }
 
-/* ---------- верхнее меню ---------- */
+/*  верхнее меню  */
 .topbar {
     position: sticky; top: 0; z-index: 10;
     background: rgba(20, 4, 1, .92); backdrop-filter: blur(8px);
@@ -56,7 +51,7 @@ a { color: var(--chat); }
 }
 .topbar a.link:hover { color: var(--chat); border-bottom-color: var(--chat); }
 
-/* ---------- страница и блоки ---------- */
+/*  страница и блоки  */
 .page {
     max-width: 1120px; margin: 0 auto; padding: 28px 20px 36px;
     display: flex; flex-direction: column; gap: 20px;
@@ -76,7 +71,7 @@ a { color: var(--chat); }
 }
 .empty { text-align: center; color: var(--muted); padding: 30px 10px; }
 
-/* ---------- макет 1: большой баннер + квадрат + строки ---------- */
+/*  макет 1: большой баннер + квадрат + строки  */
 .hero {
     min-height: 240px; position: relative; overflow: hidden;
     display: flex; flex-direction: column; justify-content: flex-end;
@@ -102,13 +97,13 @@ a { color: var(--chat); }
 .kv:last-child { border-bottom: 0; }
 .kv b { display: block; margin-top: 3px; font-size: 16px; color: #fff; }
 
-/* ---------- макет 3: широкая полоса с кнопкой ---------- */
+/*  макет 3: широкая полоса с кнопкой  */
 .strip {
     display: flex; justify-content: center; align-items: center; padding: 18px; border-radius: 999px;
     background: linear-gradient(90deg, var(--choc), var(--copper), var(--choc)); border: 1px solid var(--line);
 }
 
-/* ---------- макет 5: заголовок и колонки-карточки ---------- */
+/*  макет 5: заголовок и колонки-карточки  */
 .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(185px, 1fr)); gap: 14px; }
 .col-card {
     display: flex; flex-direction: column; gap: 8px; min-height: 220px; padding: 20px;
@@ -121,7 +116,7 @@ a { color: var(--chat); }
 .col-card h3 { margin: 0; font-family: 'Playfair Display', Georgia, serif; font-weight: 900; font-size: 19px; text-transform: uppercase; color: #fff; }
 .col-card p { margin: 0; font-size: 13px; color: var(--muted); line-height: 1.5; }
 
-/* ---------- макет 2: плашка-заголовок + кнопка, ниже ряд карточек ---------- */
+/*  макет 2: плашка-заголовок + кнопка, ниже ряд карточек  */
 .toolbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
 .pill {
     display: inline-block; padding: 12px 28px; border-radius: 999px; color: #fff;
@@ -143,7 +138,7 @@ a { color: var(--chat); }
 }
 .card .spacer { margin-top: auto; }
 
-/* ---------- макет 4: большой блок сверху, слева высокий, справа два ---------- */
+/*  макет 4: большой блок сверху, слева высокий, справа два  */
 .bento {
     display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
     grid-template-areas: "top top" "left r1" "left r2" "send send";
@@ -155,7 +150,7 @@ a { color: var(--chat); }
 .b-send { grid-area: send; }
 .step { font-family: 'Playfair Display', Georgia, serif; font-weight: 900; font-size: 40px; color: var(--orange); line-height: 1; }
 
-/* ---------- формы и кнопки ---------- */
+/*  формы и кнопки  */
 .field { margin-top: 12px; }
 .field label { display: block; margin-bottom: 8px; }
 select {
@@ -172,24 +167,24 @@ option { background: var(--ink); color: var(--yellow); }
 }
 .btn:hover { background: var(--chat); color: var(--ink); transform: translateY(-2px); }
 
-/* ---------- сообщения ---------- */
+/*  сообщения  */
 .flash { padding: 14px 18px; border-radius: 14px; font-weight: 600; border-left: 6px solid; }
 .flash.ok { background: rgba(247, 158, 58, .14); border-color: var(--chat); color: var(--yellow); }
 .flash.error { background: rgba(181, 45, 2, .38); border-color: var(--crimson); color: #ffd9cc; }
 
-/* ---------- подвал: данные о сеансе ---------- */
+/*  данные о сеансе  */
 .site-footer {
     max-width: 1120px; margin: 0 auto; padding: 16px 20px 30px; border-top: 1px solid var(--line);
     display: flex; flex-wrap: wrap; gap: 8px 30px; font-size: 12px; color: var(--muted);
 }
 .site-footer b { color: var(--yellow); }
 
-/* ---------- ошибка ---------- */
+/*  ошибка  */
 .error-block { text-align: center; padding: 50px 24px; }
 .error-block .code { font-family: 'Playfair Display', Georgia, serif; font-weight: 900; font-size: 90px; color: var(--orange); line-height: 1; }
 .error-block p { color: var(--text); margin: 14px 0 24px; }
 
-/* ---------- адаптивность ---------- */
+/*  адаптивность  */
 @media (max-width: 720px) {
     .stat-row { grid-template-columns: 1fr; }
     .stat { aspect-ratio: auto; padding: 22px; }
@@ -197,7 +192,3 @@ option { background: var(--ink); color: var(--yellow); }
     .inline-form select { min-width: 0; width: 100%; }
     .inline-form { width: 100%; }
 }
-</style>
-</head>
-<body></body>
-</html>

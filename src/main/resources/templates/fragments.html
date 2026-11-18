@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&amp;family=Playfair+Display:wght@700;900&amp;display=swap" rel="stylesheet">
-    <th:block th:replace="~{styles :: css}"></th:block>
+    <link rel="stylesheet" th:href="@{/static/css/style.css}">
 </head>
 <body>
 
@@ -22,6 +22,7 @@
     </div>
 </header>
 
+<!-- Динамический вывод сообщения -->
 <div th:fragment="flash">
     <div th:if="${flash != null}" th:class="'flash ' + ${flashType}" th:text="${flash}">Сообщение</div>
 </div>

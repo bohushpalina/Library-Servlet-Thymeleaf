@@ -20,7 +20,7 @@ public class IssueCommand implements Command {
   }
 
   @Override
-  public ViewResult execute(HttpServletRequest request) {
+  public ViewResult execute(HttpServletRequest request) throws LibraryException {
     try {
       int copyId = Params.intParam(request, "copyId");
       int readerId = Params.intParam(request, "readerId");
@@ -40,7 +40,10 @@ public class IssueCommand implements Command {
     } catch (NumberFormatException e) {
       Flash.error(request.getSession(), "Выберите экземпляр, читателя и библиотекаря из списков.");
     } catch (LibraryException e) {
-      Flash.error(request.getSession(), e.getMessage());
+      if (e.getErrorCode() == LibraryException.ErrorCode.DB_UNAVAILABLE) {
+        throw e;                                   // критическая ошибка: страница error.html
+      }
+      Flash.error(request.getSession(), e.getUserMessage());
     }
     return ViewResult.redirect("/issue");          // Post/Redirect/Get
   }

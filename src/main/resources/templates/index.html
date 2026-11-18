@@ -11,6 +11,28 @@
         <p>Поиск книг, выдача и списание экземпляров, учёт должников.</p>
     </section>
 
+    <h2 class="section-title">О системе</h2>
+    <section class="cards">
+        <article class="card">
+            <span class="tag">Назначение</span>
+            <h3>Учёт книг</h3>
+            <span class="meta">Информационная система библиотеки: каталог книг и авторов, учёт физических
+                экземпляров, выдача книг читателям и контроль должников.</span>
+        </article>
+        <article class="card">
+            <span class="tag">Данные</span>
+            <h3>База данных</h3>
+            <span class="meta">Авторы, книги, экземпляры, читатели, библиотекари и выдачи хранятся в
+                базе данных MySQL и читаются через слой DAO (JPA, Criteria API).</span>
+        </article>
+        <article class="card">
+            <span class="tag">Работа</span>
+            <h3>Как это устроено</h3>
+            <span class="meta">Единый сервлет-диспетчер выбирает контроллер по адресу, страницы строит Thymeleaf.
+                Посещения учитываются в сессии и cookie, а ошибки записываются в журнал.</span>
+        </article>
+    </section>
+
     <section class="stat-row">
         <div class="stat">
             <span class="num" th:text="${visitCount}">1</span>

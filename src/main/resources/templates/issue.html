@@ -7,7 +7,7 @@
     <div th:replace="~{fragments :: flash}"></div>
 
     <div class="block empty" th:if="${#lists.isEmpty(copies)}">Свободных экземпляров нет.</div>
-
+    <!-- # - встроенная утилита thymeleaf -->
     <form class="bento" th:unless="${#lists.isEmpty(copies)}" th:action="@{/issue}" method="post">
         <section class="block hero b-top">
             <h1 class="display">Выдача книги</h1>

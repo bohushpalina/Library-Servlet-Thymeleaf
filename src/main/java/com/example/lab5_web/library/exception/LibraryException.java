@@ -6,7 +6,8 @@ public class LibraryException extends Exception {
     QUERY_ERROR,
     TRANSACTION_ERROR,
     COPY_NOT_FOUND,
-    COPY_NOT_AVAILABLE
+    COPY_NOT_AVAILABLE,
+    DB_UNAVAILABLE
   }
 
   private final ErrorCode errorCode;
@@ -23,5 +24,13 @@ public class LibraryException extends Exception {
 
   public ErrorCode getErrorCode() {
     return errorCode;
+  }
+
+  /** Краткое понятное сообщение для пользователя. */
+  public String getUserMessage() {
+    if (errorCode == ErrorCode.DB_UNAVAILABLE) {
+      return "Не удалось подключиться к базе данных. Попробуйте повторить попытку позже.";
+    }
+    return getMessage();
   }
 }

@@ -24,6 +24,8 @@
             <property name="jakarta.persistence.jdbc.password" value="Lib12345!"/>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
+            <!-- логи EclipseLink идут через java.util.logging, а мост jul-to-slf4j передаёт их в Log4j2 -->
+            <property name="eclipselink.logging.logger" value="JavaLogger"/>
             <property name="eclipselink.logging.level" value="INFO"/>
             <property name="eclipselink.logging.level.sql" value="FINE"/>
             <property name="eclipselink.logging.parameters" value="true"/>
